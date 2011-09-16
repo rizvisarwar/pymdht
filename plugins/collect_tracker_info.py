@@ -1,9 +1,12 @@
 import core.message as message
+import core.identifier as identifier
 from core.node import Node
 import core.ptime as time
 import pickle
 import sys
-
+import core.tracker as tracker
+import time
+import threading
 STATUS_PINGED = 'PINGED'
 STATUS_OK = 'OK'
 STATUS_FAIL = 'FAIL'
@@ -18,12 +21,23 @@ class ExperimentalManager:
         # this dict contains ip and status ................ #TODO
         self.num_ok = 0
         self.num_fail = 0
-        pass
+	self.ih = identifier.Id('9a8efd265d29d75a73e91a189f874800748e7486')
+	self._tracker = tracker.Tracker()
+	#peers = self._tracker.get(self.ih)
+	#time.sleep(300)
+	threading.Thread(target = self.peer_size).start()
+	#print len(peers)
         
-         
+	 
+    def peer_size(self):
+	for i in range(1,40):
+		time.sleep(300)
+		peers = self._tracker.get(self.ih)
+		print len(peers)
     def on_query_received(self, msg):
-        if msg.query =='get_peers':
-            print int(time.time())
+	pass
+        #if msg.query =='get_peers' and msg.info_hash == self.ih:
+            #print int(time.time())
                  
     def on_response_received(self, msg, related_query):
         pass
